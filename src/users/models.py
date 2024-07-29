@@ -1,6 +1,7 @@
+import logging
 from typing import Any
 from passlib.hash import bcrypt
-from . import db
+from src.db import db
 
 
 Base = db.Model
@@ -18,3 +19,11 @@ class User(Base):
         self.full_name = kwargs.get('full_name')
         self.email = kwargs.get('email')
         self.password = bcrypt.hash(kwargs.get('password'))
+
+    def save(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except Exception as e:
+            logging.warning(str(e))
+            db.session.rollback()

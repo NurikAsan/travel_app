@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  backend:
+    build: .
+    command: sh -c "gunicorn -w 3 -b 0.0.0.0:5000 manage:app"
+    ports:
+      - '5000:5000'
+    depends_on:
+      - db
+
+  db:
+    image: mysql:latest
+    container_name: db
+    ports:
+      - '3307:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: root125
+      MYSQL_DATABASE: nurs
+      MYSQL_USER: nursultan
+      MYSQL_PASSWORD: 5500
+    volumes:
+      - db_data:/var/lib/mysql
+
+
+volumes:
+  db_data:
